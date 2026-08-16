@@ -139,7 +139,8 @@ def generate_lesson_content(lesson_title):
     print(f"🤖 Generating content for lesson: '{lesson_title}'...")
     try:
         client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
-       prompt = f"""
+     
+prompt = f"""
 You are creating a nursery rhyme for the 'Little Star Lullabies' channel. The song title is '{lesson_title}'.
 
 The style must be: Fun, colorful, and engaging for children ages 0-5. Use simple lyrics with repetition and rhymes. Each song should be educational and entertaining. Think Cocomelon style.
