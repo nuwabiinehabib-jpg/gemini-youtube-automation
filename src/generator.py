@@ -21,7 +21,7 @@ ASSETS_PATH = Path("assets")
 FONT_FILE = ASSETS_PATH / "fonts/arial.ttf"
 BACKGROUND_MUSIC_PATH = ASSETS_PATH / "music/bg_music.mp3"
 FALLBACK_THUMBNAIL_FONT = ImageFont.load_default()
-YOUR_NAME = "Chaitanya"
+YOUR_NAME = "Little Star Lullabies"
 
 # Google's TTS endpoint throttles bursts from shared CI IPs. When it does, it answers
 # 200 OK with no audio stream, which gTTS surfaces as "Probable cause: Unknown".
@@ -118,7 +118,7 @@ def generate_curriculum(previous_titles=None):
             formatted = "\n".join([f"{i+1}. {t}" for i, t in enumerate(previous_titles)])
             history = f"The following lessons have already been created:\n{formatted}\n\nPlease continue from where this series left off.\n"
 
-      prompt = f"""
+        prompt = f"""
 You are a children's content creator. Generate a curriculum for a YouTube channel called 'Little Star Lullabies' - a nursery rhymes and kids' songs channel like Cocomelon.
 
 The style must be: Fun, colorful, educational, and engaging for children ages 0-5. Use simple lyrics, repetition, and bright themes.
@@ -133,14 +133,22 @@ Generate 20 nursery rhymes and kids' songs covering these categories:
 IMPORTANT: Respond with ONLY a valid JSON object. The object must contain a key "lessons" which is a list of 20 lesson objects.
 Each lesson object must have these keys: "chapter" (category), "part" (song number), "title" (song title), "status" (defaulted to "pending"), and "youtube_id" (defaulted to null).
 """
+        response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
+        json_string = response.text.strip().replace("```json", "").replace("```", "")
+        curriculum = json.loads(json_string)
+        print("✅ New curriculum generated successfully!")
+        return curriculum
+    except Exception as e:
+        print(f"❌ CRITICAL ERROR: Failed to generate curriculum. {e}")
+        raise
+
 
 def generate_lesson_content(lesson_title):
     """Generates the content for one long-form lesson and its promotional short."""
     print(f"🤖 Generating content for lesson: '{lesson_title}'...")
     try:
         client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
-     
-prompt = f"""
+        prompt = f"""
 You are creating a nursery rhyme for the 'Little Star Lullabies' channel. The song title is '{lesson_title}'.
 
 The style must be: Fun, colorful, and engaging for children ages 0-5. Use simple lyrics with repetition and rhymes. Each song should be educational and entertaining. Think Cocomelon style.
@@ -157,7 +165,7 @@ Generate a JSON response with three keys:
 
 Return only valid JSON.
 """
-        response = client.models.generate_content(model='gemini-3.5-flash', contents=prompt)
+        response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
         json_string = response.text.strip().replace("```json", "").replace("```", "")
         content = json.loads(json_string)
         print("✅ Lesson content generated successfully.")
@@ -166,85 +174,6 @@ Return only valid JSON.
         print(f"❌ ERROR: Failed to generate lesson content: {e}")
         raise
 
-
-# def generate_visuals(output_dir, video_type, slide_content=None, thumbnail_title=None, slide_number=0, total_slides=0):
-#     """Generates a single professional, PPT-style slide or a thumbnail."""
-#     output_dir.mkdir(exist_ok=True, parents=True)
-#     is_thumbnail = thumbnail_title is not None
-
-#     width, height = (1920, 1080) if video_type == 'long' else (1080, 1920)
-#     title = thumbnail_title if is_thumbnail else slide_content.get("title", "")
-#     bg_image = get_pexels_image(title, video_type)
-
-#     if not bg_image:
-#         bg_image = Image.new('RGBA', (width, height), color=(12, 17, 29))
-#     bg_image = bg_image.resize((width, height)).filter(ImageFilter.GaussianBlur(5))
-#     darken_layer = Image.new('RGBA', bg_image.size, (0, 0, 0, 150))
-#     final_bg = Image.alpha_composite(bg_image, darken_layer).convert("RGB")
-#     if is_thumbnail and video_type == 'long':
-#         w, h = final_bg.size
-#         if h > w:
-#             print("⚠️ Detected vertical thumbnail for long video. Rotating and resizing to 1920x1080...")
-#             final_bg = final_bg.transpose(Image.ROTATE_270).resize((1920, 1080))
-#     draw = ImageDraw.Draw(final_bg)
-
-#     try:
-#         title_font = ImageFont.truetype(str(FONT_FILE), 80 if video_type == 'long' else 90)
-#         content_font = ImageFont.truetype(str(FONT_FILE), 45 if video_type == 'long' else 55)
-#         footer_font = ImageFont.truetype(str(FONT_FILE), 25 if video_type == 'long' else 35)
-#     except IOError:
-#         title_font = content_font = footer_font = FALLBACK_THUMBNAIL_FONT
-
-#     if not is_thumbnail:
-#         header_height = int(height * 0.18)
-#         draw.rectangle([0, 0, width, header_height], fill=(25, 40, 65, 200))
-#         title_bbox = draw.textbbox((0, 0), title, font=title_font)
-#         title_x = (width - (title_bbox[2] - title_bbox[0])) / 2
-#         title_y = (header_height - (title_bbox[3] - title_bbox[1])) / 2
-#         draw.text((title_x, title_y), title, font=title_font, fill=(255, 255, 255))
-#     else:
-#         title_bbox = draw.textbbox((0, 0), title, font=title_font)
-#         title_x = (width - (title_bbox[2] - title_bbox[0])) / 2
-#         title_y = (height - (title_bbox[3] - title_bbox[1])) / 2
-#         draw.text((title_x, title_y), title, font=title_font, fill=(255, 255, 255), stroke_width=2, stroke_fill="black")
-
-#     if not is_thumbnail:
-#         content = slide_content.get("content", "")
-#         is_special_slide = len(content.split()) < 10
-
-#         words = content.split()
-#         lines = []
-#         current_line = ""
-#         for word in words:
-#             test_line = f"{current_line} {word}".strip()
-#             if draw.textbbox((0, 0), test_line, font=content_font)[2] < width * 0.85:
-#                 current_line = test_line
-#             else:
-#                 lines.append(current_line)
-#                 current_line = word
-#         lines.append(current_line)
-
-#         line_height = content_font.getbbox("A")[3] + 15
-#         total_text_height = len(lines) * line_height
-#         y_text = (height - total_text_height) / 2 if is_special_slide else header_height + 100
-
-#         for line in lines:
-#             line_bbox = draw.textbbox((0, 0), line, font=content_font)
-#             line_x = (width - (line_bbox[2] - line_bbox[0])) / 2
-#             draw.text((line_x, y_text), line, font=content_font, fill=(230, 230, 230))
-#             y_text += line_height
-
-#         footer_height = int(height * 0.06)
-#         draw.rectangle([0, height - footer_height, width, height], fill=(25, 40, 65, 200))
-#         draw.text((40, height - footer_height + 12), f"AI for Developers by {YOUR_NAME}", font=footer_font, fill=(180, 180, 180))
-#         if total_slides > 0:
-#             slide_num_text = f"Slide {slide_number} of {total_slides}"
-#             slide_num_bbox = draw.textbbox((0, 0), slide_num_text, font=footer_font)
-#             draw.text((width - slide_num_bbox[2] - 40, height - footer_height + 12), slide_num_text, font=footer_font, fill=(180, 180, 180))
-#     file_prefix = "thumbnail" if is_thumbnail else f"slide_{slide_number:02d}"
-#     path = output_dir / f"{file_prefix}.png"
-#     final_bg.save(path)
-#     return str(path)
 
 def generate_visuals(output_dir, video_type, slide_content=None, thumbnail_title=None, slide_number=0, total_slides=0):
     """Generates a single professional, PPT-style slide or a thumbnail with corrected alignment."""
