@@ -118,45 +118,44 @@ def generate_curriculum(previous_titles=None):
             formatted = "\n".join([f"{i+1}. {t}" for i, t in enumerate(previous_titles)])
             history = f"The following lessons have already been created:\n{formatted}\n\nPlease continue from where this series left off.\n"
 
-        prompt = f"""
-        You are an expert AI educator. Generate a curriculum for a YouTube series called 'AI for Developers by {YOUR_NAME}'.
-        {history}
-        The style must be: 'Assume the viewer is a beginner or non-technical person starting their journey into AI as a developer.
-        Use simple real-world analogies, relatable examples, and then connect to technical concepts.'
+      prompt = f"""
+You are a children's content creator. Generate a curriculum for a YouTube channel called 'Little Star Lullabies' - a nursery rhymes and kids' songs channel like Cocomelon.
 
-        The curriculum must guide a developer from absolute beginner to advanced AI, covering foundations like Generative AI, LLMs, Vector Databases, and Agentic AI...
-        ...then continue into deep AI topics like Reinforcement Learning, Transformers internals, multi-agent systems, tool use, LangGraph, AI architecture, and more.
+The style must be: Fun, colorful, educational, and engaging for children ages 0-5. Use simple lyrics, repetition, and bright themes.
 
-        Respond with ONLY a valid JSON object. The object must contain a key "lessons" which is a list of 20 lesson objects.
-        Each lesson object must have these keys: "chapter", "part", "title", "status" (defaulted to "pending"), and "youtube_id" (defaulted to null).
-        """
-        response = client.models.generate_content(model='gemini-3.5-flash', contents=prompt)
-        json_string = response.text.strip().replace("```json", "").replace("```", "")
-        curriculum = json.loads(json_string)
-        print("✅ New curriculum generated successfully!")
-        return curriculum
-    except Exception as e:
-        print(f"❌ CRITICAL ERROR: Failed to generate curriculum. {e}")
-        raise
+Generate 20 nursery rhymes and kids' songs covering these categories:
+- Classic nursery rhymes (Wheels on the Bus, Twinkle Twinkle, Old MacDonald, Itsy Bitsy Spider, Row Row Row Your Boat)
+- Educational songs (ABC Song, Numbers Song, Colors Song, Shapes Song, Days of the Week)
+- Fun action songs (If You're Happy and You Know It, Head Shoulders Knees & Toes)
+- Animal songs (Old MacDonald, Five Little Ducks, Baa Baa Black Sheep)
+- Daily routine songs (Morning Song, Bedtime Song, Bath Time Song)
 
+IMPORTANT: Respond with ONLY a valid JSON object. The object must contain a key "lessons" which is a list of 20 lesson objects.
+Each lesson object must have these keys: "chapter" (category), "part" (song number), "title" (song title), "status" (defaulted to "pending"), and "youtube_id" (defaulted to null).
+"""
 
 def generate_lesson_content(lesson_title):
     """Generates the content for one long-form lesson and its promotional short."""
     print(f"🤖 Generating content for lesson: '{lesson_title}'...")
     try:
         client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
-        prompt = f"""
-        You are creating a lesson for the 'AI for Developers by {YOUR_NAME}' series. The topic is '{lesson_title}'.
-        The style is: Assume the viewer is a beginner developer or non-tech person who wants to learn AI from scratch.
-        Use analogies and clear, simple language. Each concept must be explained from a developer's perspective, assuming no prior AI or ML knowledge.
+       prompt = f"""
+You are creating a nursery rhyme for the 'Little Star Lullabies' channel. The song title is '{lesson_title}'.
 
-        Generate a JSON response with three keys:
-        1. "long_form_slides": A list of 7 to 8 slide objects for a longer, more detailed main video. Each object needs a "title" and "content" key.
-        2. "short_form_highlight": A single, punchy, 1-2 sentence summary for a YouTube Short.
-        3. "hashtags": A string of 5-7 relevant, space-separated hashtags for this lesson (e.g., "#GenerativeAI #LLM #Developer","#NeuralNetworks #BeginnerAI #AIforDevelopers").
+The style must be: Fun, colorful, and engaging for children ages 0-5. Use simple lyrics with repetition and rhymes. Each song should be educational and entertaining. Think Cocomelon style.
 
-        Return only valid JSON.
-        """
+Generate a JSON response with three keys:
+1. "long_form_slides": A list of 6-8 slide objects. Each slide represents one verse or scene of the song:
+   - "title": The verse/scene name (e.g., "Verse 1", "Chorus", "Verse 2")
+   - "content": The lyrics for that verse AND a brief description of what to show visually (e.g., "Lyrics: Wheels on the bus go round and round... Scene: A colorful bus driving through a town with happy children")
+   Each slide should be complete enough to create a fun visual for the music video.
+
+2. "short_form_highlight": A 15-second snippet of the catchiest part of the song (2-3 lines of lyrics) for a YouTube Short.
+
+3. "hashtags": A string of 5-7 relevant hashtags (e.g., "#NurseryRhymes #KidsSongs #BabySongs #LittleStarLullabies #CocomelonStyle #SingAlong #ToddlerSongs")
+
+Return only valid JSON.
+"""
         response = client.models.generate_content(model='gemini-3.5-flash', contents=prompt)
         json_string = response.text.strip().replace("```json", "").replace("```", "")
         content = json.loads(json_string)
