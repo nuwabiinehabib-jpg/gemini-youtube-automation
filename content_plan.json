@@ -1,1 +1,144 @@
-
+{
+  "lessons": [
+    {
+      "chapter": "Classic Nursery Rhymes",
+      "part": 1,
+      "title": "Wheels on the Bus",
+      "status": "complete",
+      "youtube_id": "sIbsk75OZS4"
+    },
+    {
+      "chapter": "Classic Nursery Rhymes",
+      "part": 2,
+      "title": "Twinkle Twinkle Little Star",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Classic Nursery Rhymes",
+      "part": 3,
+      "title": "Itsy Bitsy Spider",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Classic Nursery Rhymes",
+      "part": 4,
+      "title": "Row Row Row Your Boat",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Classic Nursery Rhymes",
+      "part": 5,
+      "title": "Humpty Dumpty",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Educational Songs",
+      "part": 6,
+      "title": "The ABC Phonics Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Educational Songs",
+      "part": 7,
+      "title": "The Numbers Song (1 to 10)",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Educational Songs",
+      "part": 8,
+      "title": "The Rainbow Colors Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Educational Songs",
+      "part": 9,
+      "title": "The Shapes Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Educational Songs",
+      "part": 10,
+      "title": "Days of the Week Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Fun Action Songs",
+      "part": 11,
+      "title": "If You're Happy and You Know It",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Fun Action Songs",
+      "part": 12,
+      "title": "Head, Shoulders, Knees, and Toes",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Fun Action Songs",
+      "part": 13,
+      "title": "The Hokey Pokey Shake",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Fun Action Songs",
+      "part": 14,
+      "title": "The Freeze Dance Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Animal Songs",
+      "part": 15,
+      "title": "Old MacDonald Had a Farm",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Animal Songs",
+      "part": 16,
+      "title": "Five Little Ducks",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Animal Songs",
+      "part": 17,
+      "title": "Baa Baa Black Sheep",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Daily Routine Songs",
+      "part": 18,
+      "title": "This Is the Way (Morning Routine Song)",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Daily Routine Songs",
+      "part": 19,
+      "title": "Splish Splash Bath Time Song",
+      "status": "pending",
+      "youtube_id": null
+    },
+    {
+      "chapter": "Daily Routine Songs",
+      "part": 20,
+      "title": "Sweet Dreams Bedtime Lullaby",
+      "status": "pending",
+      "youtube_id": null
+    }
+  ]
+}
